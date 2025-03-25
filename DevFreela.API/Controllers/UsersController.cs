@@ -1,4 +1,5 @@
 using DevFreela.API.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -28,5 +29,16 @@ namespace DevFreela.API.Controllers
         {
             return NoContent();
         }
+
+        [HttpPut("{id}/profile-picture")]
+        public IActionResult PostProfilePicture(IFormFile file)
+        {
+            var description = $"File: {file.FileName}, Size: {file.Length}";
+
+            // processar imagem
+
+            return Ok(description);
+        }
+
     }
 }

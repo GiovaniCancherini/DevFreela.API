@@ -1,5 +1,7 @@
 using DevFreela.API.Models;
+using DevFreela.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +13,30 @@ namespace DevFreela.API.Controllers
     [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
+        private readonly FreelanceTotalCostConfig _config;
+        private readonly IConfigService _configServic;
+
+        public ProjectsController(
+            IOptions<FreelanceTotalCostConfig> option,
+            IConfigService configService)
+        {
+            _config = option.Value;
+            _configServic = configService;
+        }
+
+
         // GET: api/projects?search=abc
         [HttpGet]
-        public IActionResult Get(string search)
+        public IActionResult Get(string search = "")
         {
-            return Ok();
+            return Ok(_configServic.GetValue());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+            throw new Exception();
+
             return Ok();
         }
 
@@ -39,7 +55,7 @@ namespace DevFreela.API.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, UpdateProjectModel updateProject)
         {
-            updateProject.Id = id;
+            updateProject.IdProject = id;
 
             if (updateProject.Description.Length > 200)
             {
