@@ -24,6 +24,12 @@ namespace DevFreela.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = 1 }, createUser);
         }
 
+        [HttpPost("{id}/skills")]
+        public IActionResult PostSkills(UserSkillInputModel model)
+        {
+            return NoContent();
+        }
+
         [HttpPut("{id}/login")]
         public IActionResult Login(int id, LoginModel login)
         {
@@ -40,5 +46,10 @@ namespace DevFreela.API.Controllers
             return Ok(description);
         }
 
+        [HttpPost]
+        public IActionResult Post(CreateUserInputModel model)
+        {
+            return Ok();
+        }
     }
 }

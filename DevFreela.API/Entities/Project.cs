@@ -7,11 +7,11 @@ namespace DevFreela.API.Entities
     {
         protected Project() { }
 
-        public Project(string tittle, string decription, int idClient, int idFreelancer, decimal totalCost)
+        public Project(string title, string description, int idClient, int idFreelancer, decimal totalCost)
             : base()
         {
-            Tittle = tittle;
-            Decription = decription;
+            Title = title;
+            Description = description;
             IdClient = idClient;
             IdFreelancer = idFreelancer;
             TotalCost = totalCost;
@@ -20,8 +20,8 @@ namespace DevFreela.API.Entities
             Comments = new List<ProjectComment>();
         }
 
-        public string Tittle { get; private set; }
-        public string Decription { get; private set; }
+        public string Title { get; private set; }
+        public string Description { get; private set; }
         public int IdClient { get; private set; }
         public User Client { get; private set; }
         public int IdFreelancer { get; private set; }

@@ -29,14 +29,13 @@ namespace DevFreela.API.Controllers
         [HttpGet]
         public IActionResult Get(string search = "")
         {
-            return Ok(_configServic.GetValue());
+            //return Ok(_configServic.GetValue());
+            return Ok();
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            throw new Exception();
-
             return Ok();
         }
 
