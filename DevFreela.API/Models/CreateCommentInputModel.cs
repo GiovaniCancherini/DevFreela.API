@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DevFreela.API.Models
 {
-    public class CreateCommentModel
+    public class CreateCommentInputModel
     {
         public string Content { get; set; }
 

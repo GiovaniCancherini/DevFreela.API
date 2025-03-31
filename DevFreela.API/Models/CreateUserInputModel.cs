@@ -1,12 +1,16 @@
 ﻿namespace DevFreela.API.Models
 {
-    public class CreateSkillInputModel
+    public class CreateUserInputModel
     {
-        public CreateSkillInputModel(string decription)
+        public CreateUserInputModel(string fullName, string email, DateTime birthDate)
         {
-            Decription = decription;
+            FullName = fullName;
+            Email = email;
+            BirthDate = birthDate;
         }
 
-        public string Decription { get; private set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }

@@ -68,5 +68,10 @@ namespace DevFreela.API.Entities
                 Status = ProjectControllerEnum.PaymentPending;
             }
         }
+
+        public void Update(string title, string description, decimal totalCost)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
