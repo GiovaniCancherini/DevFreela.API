@@ -71,7 +71,14 @@ namespace DevFreela.API.Entities
 
         public void Update(string title, string description, decimal totalCost)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description) || totalCost < 0)
+            {
+                throw new ArgumentException("Invalid project update parameters.");
+            }
+
+            Title = title;
+            Description = description;
+            TotalCost = totalCost;
         }
     }
 }

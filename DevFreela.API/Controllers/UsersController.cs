@@ -19,7 +19,7 @@ namespace DevFreela.API.Controllers
 
         public UsersController(DevFreelaDbContext context)
         {
-            context = _context;
+            _context = context;
         }
 
         [HttpGet("{id}")]

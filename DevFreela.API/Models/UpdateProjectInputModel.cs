@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DevFreela.API.Models
 {
-    public class UpdateProjectModel
+    public class UpdateProjectInputModel
     {
         public int IdProject { get; set; }
 

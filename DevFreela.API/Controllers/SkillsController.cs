@@ -17,17 +17,11 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             var skills = _context.Skills.ToList();
 
             return Ok(skills);
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            return Ok();
         }
 
         [HttpPost]

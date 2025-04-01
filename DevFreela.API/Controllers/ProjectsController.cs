@@ -17,20 +17,17 @@ namespace DevFreela.API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly DevFreelaDbContext _context;
-
         private readonly FreelanceTotalCostConfig _config;
         private readonly IConfigService _configServic;
 
         public ProjectsController(
+            DevFreelaDbContext context,
             IOptions<FreelanceTotalCostConfig> option,
             IConfigService configService)
         {
             _config = option.Value;
             _configServic = configService;
-        }
 
-        public ProjectsController(DevFreelaDbContext context)
-        {
             _context = context;
         }
 
@@ -84,7 +81,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, UpdateProjectModel model)
+        public IActionResult Put(int id, UpdateProjectInputModel model)
         {
             model.IdProject = id;
 
