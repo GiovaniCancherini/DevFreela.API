@@ -4,6 +4,7 @@ using DevFreela.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevFreela.API.Persistence.Migrations
 {
     [DbContext(typeof(DevFreelaDbContext))]
-    partial class DevFreelaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250425203137_aposConexaoAzureSucesso")]
+    partial class aposConexaoAzureSucesso
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

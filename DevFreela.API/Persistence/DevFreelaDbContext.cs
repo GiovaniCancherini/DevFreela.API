@@ -1,5 +1,6 @@
 ﻿using DevFreela.API.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace DevFreela.API.Persistence
 {
@@ -74,6 +75,9 @@ namespace DevFreela.API.Persistence
                         .WithMany(f => f.OwnedProjects)
                         .HasForeignKey(p => p.IdClient)
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    e.Property(p => p.TotalCost)
+                        .HasPrecision(18, 4);
                 });
 
             base.OnModelCreating(builder);
