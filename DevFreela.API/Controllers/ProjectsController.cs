@@ -34,12 +34,14 @@ namespace DevFreela.API.Controllers
 
         // GET: api/projects?search=abc
         [HttpGet]
-        public IActionResult Get(string search = "")
+        public IActionResult Get(string search = "", int page = 0, int size = 3)
         {
             var projects = _context.Projects
                 .Include(p => p.Client)
                 .Include(p => p.Freelancer)
                 .Where(p => !p.IsDeleted && (search == "" || p.Title.Contains(search)))
+                .Skip(page * size)
+                .Take(size)
                 .ToList();
 
             var model = projects
