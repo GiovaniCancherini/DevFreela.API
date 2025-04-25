@@ -39,7 +39,8 @@ namespace DevFreela.API.Controllers
             var projects = _context.Projects
                 .Include(p => p.Client)
                 .Include(p => p.Freelancer)
-                .Where(p => !p.IsDeleted);
+                .Where(p => !p.IsDeleted && (search == "" || p.Title.Contains(search)))
+                .ToList();
 
             var model = projects
                 .Select(ProjectItemViewModel.FromEntity)
