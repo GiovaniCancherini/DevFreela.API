@@ -1,5 +1,5 @@
-using DevFreela.API.Entities;
-using DevFreela.API.Models;
+using DevFreela.Core.Entities;
+using DevFreela.Application.Models;
 using DevFreela.API.Persistence;
 using DevFreela.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevFreela.Infrastructure.Persistence;
 
 namespace DevFreela.API.Controllers
 {

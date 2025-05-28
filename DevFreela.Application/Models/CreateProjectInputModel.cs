@@ -1,11 +1,11 @@
 ﻿
-using DevFreela.API.Entities;
+using DevFreela.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DevFreela.API.Models
+namespace DevFreela.Application.Models
 {
     public class CreateProjectInputModel
     {
