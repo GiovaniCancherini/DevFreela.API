@@ -16,9 +16,9 @@ builder.Services.Configure<FreelanceTotalCostConfig>(
 
 builder.Services.AddScoped<IConfigService, ConfigService>();
 
-builder.Services.AddDbContext<DevFreelaDbContext>(o => o.UseInMemoryDatabase("DevFreelaDbInMemory"));
-// var connectionString = builder.Configuration.GetConnectionString("AzureConnection");
-// builder.Services.AddDbContext<DevFreelaDbContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContext<DevFreelaDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
