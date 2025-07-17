@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 
 namespace DevFreela.Application.Services
 {
-    internal interface IProjectService
+    public interface IProjectService
     {
         ResultViewModel<List<ProjectViewModel>> GetAll(string search = "");
+        ResultViewModel<List<ProjectViewModel>> GetAll(string search = "", int page = 0, int size = 3);
         ResultViewModel<ProjectViewModel> GetById(int id);
         ResultViewModel<int> Insert(CreateProjectInputModel projectInputModel);
         ResultViewModel<int> Update(int id, UpdateProjectInputModel projectInputModel);

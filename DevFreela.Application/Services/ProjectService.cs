@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DevFreela.Application.Services
 {
-    public class ProjectService : IProjectService
+    internal class ProjectService : IProjectService
     {
         private readonly DevFreelaDbContext _context;
 
@@ -20,12 +20,29 @@ namespace DevFreela.Application.Services
         }
 
         // Implementation of the methods defined in the interface
+
         public ResultViewModel<List<ProjectViewModel>> GetAll(string search = "")
         {
             var projects = _context.Projects
                 .Include(p => p.Client)
                 .Include(p => p.Freelancer)
                 .Where(p => !p.IsDeleted)
+                .ToList();
+
+            var model = projects
+                .Select(ProjectViewModel.FromEntity)
+                .ToList();
+
+            return ResultViewModel<List<ProjectViewModel>>.Success(model);
+        }
+        public ResultViewModel<List<ProjectViewModel>> GetAll(string search = "", int page = 0, int size = 3)
+        {
+            var projects = _context.Projects
+                .Include(p => p.Client)
+                .Include(p => p.Freelancer)
+                .Where(p => !p.IsDeleted && (search == "" || p.Title.Contains(search)))
+                .Skip(page * size)
+                .Take(size)
                 .ToList();
 
             var model = projects
@@ -57,6 +74,11 @@ namespace DevFreela.Application.Services
         }
         public ResultViewModel<int> Insert(CreateProjectInputModel model)
         {
+            if (model.Title.Length > 50)
+            {
+                return ResultViewModel<int>.Failure("50 characters maximum for the title.");
+            }
+
             var project = model.ToEntity();
 
             _context.Projects.Add(project);
@@ -66,6 +88,13 @@ namespace DevFreela.Application.Services
         }
         public ResultViewModel<int> Update(int id, UpdateProjectInputModel model)
         {
+            model.IdProject = id;
+
+            if (model.Description.Length > 200)
+            {
+                return ResultViewModel<int>.Failure("200 characters maximum for description.");
+            }
+
             var project = _context.Projects.SingleOrDefault(p => p.Id == model.IdProject);
 
             if (project is null)
