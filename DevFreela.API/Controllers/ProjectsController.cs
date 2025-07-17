@@ -32,6 +32,21 @@ namespace DevFreela.API.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public IActionResult Get(string search = "")
+        {
+            var projects = _context.Projects
+                .Include(p => p.Client)
+                .Include(p => p.Freelancer)
+                .Where(p => !p.IsDeleted)
+                .ToList();
+
+            var model = projects
+                .Select(ProjectItemViewModel.FromEntity)
+                .ToList();
+
+            return Ok(model);
+        }
 
         // GET: api/projects?search=abc
         [HttpGet]

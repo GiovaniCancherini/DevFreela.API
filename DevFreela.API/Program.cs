@@ -5,20 +5,24 @@ using DevFreela.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using DevFreela.Infrastructure.Persistence;
+using DevFreela.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.Configure<FreelanceTotalCostConfig>(
     builder.Configuration.GetSection("FreelanceTotalCostConfig")
     );
 
 builder.Services.AddScoped<IConfigService, ConfigService>();
 
+// MY DB CONTEXT (DEFAULT LOCALHOST CONNECTION)
 builder.Services.AddDbContext<DevFreelaDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// MY!!! Register Application services
+builder.Services
+    .AddApplication();
 
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
