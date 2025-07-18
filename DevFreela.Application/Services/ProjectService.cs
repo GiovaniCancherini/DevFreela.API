@@ -171,6 +171,8 @@ namespace DevFreela.Application.Services
         }
         public ResultViewModel<int> InsertComment(int id, CreateCommentInputModel createComment)
         {
+            createComment.IdProject = id;
+
             var project = _context.Projects.SingleOrDefault(p => p.Id == createComment.IdProject);
 
             if (project is null)
