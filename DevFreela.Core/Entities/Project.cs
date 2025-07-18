@@ -16,6 +16,7 @@ namespace DevFreela.Core.Entities
             TotalCost = totalCost;
 
             Status = ProjectControllerEnum.Created;
+            CreatedAt = DateTime.Now;
             Comments = new List<ProjectComment>();
         }
 

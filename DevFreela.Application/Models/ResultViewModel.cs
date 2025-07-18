@@ -10,7 +10,7 @@ namespace DevFreela.Application.Models
     {
         public ResultViewModel(bool isSucess = true, string message = "")
         {
-            IsSucess = IsSucess;
+            IsSucess = isSucess;
             Message = message;
         }
         public bool IsSucess { get; private set; }
