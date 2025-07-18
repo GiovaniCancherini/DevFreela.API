@@ -1,8 +1,6 @@
 using DevFreela.API.ExceptionHandler;
 using DevFreela.Application.Models;
-using DevFreela.API.Persistence;
 using DevFreela.API.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Application;
