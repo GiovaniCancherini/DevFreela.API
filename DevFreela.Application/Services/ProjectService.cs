@@ -21,25 +21,12 @@ namespace DevFreela.Application.Services
 
         // Implementation of the methods defined in the interface
 
-        public ResultViewModel<List<ProjectViewModel>> GetAll(string search = "")
-        {
-            var projects = _context.Projects
-                .Include(p => p.Client)
-                .Include(p => p.Freelancer)
-                .Where(p => !p.IsDeleted)
-                .ToList();
-
-            var model = projects
-                .Select(ProjectViewModel.FromEntity)
-                .ToList();
-
-            return ResultViewModel<List<ProjectViewModel>>.Success(model);
-        }
         public ResultViewModel<List<ProjectViewModel>> GetAll(string search = "", int page = 0, int size = 3)
         {
             var projects = _context.Projects
                 .Include(p => p.Client)
                 .Include(p => p.Freelancer)
+                .Include(p => p.Comments)
                 .Where(p => !p.IsDeleted && (search == "" || p.Title.Contains(search)))
                 .Skip(page * size)
                 .Take(size)
