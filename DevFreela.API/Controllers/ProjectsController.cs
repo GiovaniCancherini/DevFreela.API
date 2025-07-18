@@ -99,7 +99,7 @@ namespace DevFreela.API.Controllers
         [HttpPut("{id}/start")]
         public IActionResult Start(int id)
         {
-            var result = _service.Delete(id);
+            var result = _service.Start(id);
 
             if (!result.IsSucess)
             {
@@ -112,7 +112,7 @@ namespace DevFreela.API.Controllers
         [HttpPut("{id}/complete")]
         public IActionResult Complete(int id)
         {
-            var result = _service.Delete(id);
+            var result = _service.Finish(id);
 
             if (!result.IsSucess)
             {
