@@ -109,10 +109,23 @@ namespace DevFreela.API.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}/cancel")]
+        public IActionResult Cancel(int id)
+        {
+            var result = _service.Cancel(id);
+
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return NoContent();
+        }
+
         [HttpPut("{id}/complete")]
         public IActionResult Complete(int id)
         {
-            var result = _service.Finish(id);
+            var result = _service.Complete(id);
 
             if (!result.IsSucess)
             {

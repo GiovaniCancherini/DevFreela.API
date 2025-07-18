@@ -139,7 +139,22 @@ namespace DevFreela.Application.Services
 
             return ResultViewModel.Success();
         }
-        public ResultViewModel Finish(int id)
+        public ResultViewModel Cancel(int id)
+        {
+            var project = _context.Projects.SingleOrDefault(p => p.Id == id);
+
+            if (project is null)
+            {
+                return ResultViewModel.Failure("Project not exist.");
+            }
+
+            project.Cancel();
+            _context.Projects.Update(project);
+            _context.SaveChanges();
+
+            return ResultViewModel.Success();
+        }
+        public ResultViewModel Complete(int id)
         {
             var project = _context.Projects.SingleOrDefault(p => p.Id == id);
 

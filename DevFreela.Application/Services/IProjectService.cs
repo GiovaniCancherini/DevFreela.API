@@ -19,7 +19,8 @@ namespace DevFreela.Application.Services
         ResultViewModel<int> Update(int id, UpdateProjectInputModel projectInputModel);
         ResultViewModel Delete(int id);
         ResultViewModel Start(int id);
-        ResultViewModel Finish(int id);
+        ResultViewModel Cancel(int id);
+        ResultViewModel Complete(int id);
         ResultViewModel<int> InsertComment(int id, CreateCommentInputModel createCommentInputModel);
     }
 }
