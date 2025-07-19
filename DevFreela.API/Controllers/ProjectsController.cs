@@ -30,6 +30,11 @@ namespace DevFreela.API.Controllers
         {
             var result = _service.GetAll(search, page, size);
 
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
+
             return Ok(result);
         }
 

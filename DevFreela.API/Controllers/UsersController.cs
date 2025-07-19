@@ -1,14 +1,7 @@
-using DevFreela.Core.Entities;
 using DevFreela.Application.Models;
-using DevFreela.API.Persistence;
-using Microsoft.AspNetCore.Http.HttpResults;
+using DevFreela.Application.Services;
+using DevFreela.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DevFreela.Infrastructure.Persistence;
 
 namespace DevFreela.API.Controllers
 {
@@ -16,70 +9,89 @@ namespace DevFreela.API.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        private readonly DevFreelaDbContext _context;
+        private readonly IUserService _service;
 
-        public UsersController(DevFreelaDbContext context)
+        public UsersController(IUserService service)
         {
-            _context = context;
+            _service = service;
+        }
+
+        [HttpGet]
+        public IActionResult Get(string search = "")
+        {
+            var result = _service.GetAll(search);
+
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var user = _context
-                .Users
-                .Include(u => u.Skills)
-                    .ThenInclude(us => us.Skill)
-                .SingleOrDefault(u => u.Id == id);
+            var result = _service.GetById(id);
 
-            if (user is null)
+            if (!result.IsSucess)
             {
-                return NotFound();
+                return BadRequest(result.Message);
             }
 
-            var model = UserViewModel.FromEntity(user);
-
-            return Ok(model);
+            return Ok(result);
         }
 
         [HttpPost]
         public IActionResult Post(CreateUserInputModel model)
         {
-            var user = new User(model.FullName, model.Email, model.BirthDate);
+            var result = _service.Insert(model);
 
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
 
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpPost("{id}/skills")]
         public IActionResult PostSkills(int id, UserSkillInputModel model)
         {
-            var userSkills = model.SkillIds
-                .Select(idSkill => new UserSkill(id, idSkill))
-                .ToList();
+            var result = _service.InsertSkills(id, model);
 
-            _context.UserSkills.AddRange(userSkills);
-            _context.SaveChanges();
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
 
-            return NoContent();
-        }
-
-        [HttpPut("{id}/login")]
-        public IActionResult Login(int id, LoginModel login)
-        {
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpPut("{id}/profile-picture")]
         public IActionResult PostProfilePicture(int id, IFormFile file)
         {
-            var description = $"File: {file.FileName}, Size: {file.Length}";
+            var result = _service.InsertProfilePicture(id, file);
 
-            // processar imagem
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
 
-            return Ok(description);
+            return Ok(result);
+        }
+
+        [HttpPut("{id}/login")]
+        public IActionResult Login(int id, LoginModel login)
+        {
+            var result = _service.Login(id, login);
+
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result);
         }
     }
 }
