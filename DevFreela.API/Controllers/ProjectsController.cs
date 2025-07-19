@@ -1,16 +1,8 @@
-using DevFreela.API.Persistence;
 using DevFreela.API.Services;
 using DevFreela.Application.Models;
 using DevFreela.Application.Services;
-using DevFreela.Core.Entities;
-using DevFreela.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DevFreela.API.Controllers
 {
@@ -18,13 +10,11 @@ namespace DevFreela.API.Controllers
     [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
-        private readonly DevFreelaDbContext _context;
         private readonly FreelanceTotalCostConfig _config;
         private readonly IConfigService _configServic;
         private readonly IProjectService _service;
 
         public ProjectsController(
-            DevFreelaDbContext context,
             IOptions<FreelanceTotalCostConfig> option,
             IConfigService configService,
             IProjectService service)
@@ -32,7 +22,6 @@ namespace DevFreela.API.Controllers
             _config = option.Value;
             _configServic = configService;
 
-            _context = context;
             _service = service;
         }
 
