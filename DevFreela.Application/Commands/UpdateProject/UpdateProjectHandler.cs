@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DevFreela.Application.Commands.UpdateProject
 {
-    public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, ResultViewModel>    
+    public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, ResultViewModel<int>>    
     {
         private readonly DevFreelaDbContext _context;
         public UpdateProjectHandler(DevFreelaDbContext context)
@@ -13,7 +13,7 @@ namespace DevFreela.Application.Commands.UpdateProject
             _context = context;
         }
 
-        public async Task<ResultViewModel> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
+        public async Task<ResultViewModel<int>> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
             if (request.Title.Length > 50)
             {
@@ -32,7 +32,7 @@ namespace DevFreela.Application.Commands.UpdateProject
             }
             if (project.IsDeleted)
             {
-                return ResultViewModel.Failure("Project is deleted.");
+                return ResultViewModel<int>.Failure("Project is deleted.");
             }
 
             project.Update(request.Title, request.Description, request.TotalCost);
