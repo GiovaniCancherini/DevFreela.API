@@ -3,7 +3,7 @@ using MediatR;
 
 namespace DevFreela.Application.Commands.InsertCommentInProject
 {
-    public class InsertCommentInProjectCommand : IRequest<ResultViewModel>
+    public class InsertCommentInProjectCommand : IRequest<ResultViewModel<int>>
     {
         public InsertCommentInProjectCommand(string content, int idProject, int idUser)
         {

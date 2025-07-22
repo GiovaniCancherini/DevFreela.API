@@ -1,6 +1,10 @@
-using DevFreela.Application.Models;
-using DevFreela.Application.Services;
-using DevFreela.Core.Entities;
+using DevFreela.Application.Commands.InsertProfilePictureInUser;
+using DevFreela.Application.Commands.InsertSkillsInUser;
+using DevFreela.Application.Commands.InsertUser;
+using DevFreela.Application.Commands.LoginUser;
+using DevFreela.Application.Queries.GetAllUsers;
+using DevFreela.Application.Queries.GetUserById;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers
@@ -9,17 +13,19 @@ namespace DevFreela.API.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _service;
+        private readonly IMediator _mediator;
 
-        public UsersController(IUserService service)
+        public UsersController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public IActionResult Get(string search = "")
+        public async Task<IActionResult> Get(string search = "")
         {
-            var result = _service.GetAll(search);
+            var query = new GetAllUsersQuery(search);
+
+            var result = await _mediator.Send(query);
 
             if (!result.IsSucess)
             {
@@ -30,9 +36,11 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var result = _service.GetById(id);
+            var query = new GetUserByIdQuery(id);
+
+            var result = await _mediator.Send(query);
 
             if (!result.IsSucess)
             {
@@ -43,55 +51,59 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(CreateUserInputModel model)
+        public async Task<IActionResult> Post(InsertUserCommand command)
         {
-            var result = _service.Insert(model);
+            var result = await _mediator.Send(command);
 
             if (!result.IsSucess)
             {
                 return BadRequest(result.Message);
             }
 
-            return Ok(result);
+            return CreatedAtAction(nameof(GetById), new { id = result.Data }, command);
         }
 
         [HttpPost("{id}/skills")]
-        public IActionResult PostSkills(int id, UserSkillInputModel model)
+        public async Task<IActionResult> PostSkills(int id, InsertSkillsInUserCommand command)
         {
-            var result = _service.InsertSkills(id, model);
+            command.Id = id;
+
+            var result = await _mediator.Send(command);
 
             if (!result.IsSucess)
             {
                 return BadRequest(result.Message);
             }
 
-            return Ok(result);
+            return NoContent();
         }
 
         [HttpPut("{id}/profile-picture")]
-        public IActionResult PostProfilePicture(int id, IFormFile file)
+        public async Task<IActionResult> PostProfilePicture(int id, InsertProfilePictureInUserCommand command)
         {
-            var result = _service.InsertProfilePicture(id, file);
+            command.Id = id;
+
+            var result = await _mediator.Send(command);
 
             if (!result.IsSucess)
             {
                 return BadRequest(result.Message);
             }
 
-            return Ok(result);
+            return NoContent();
         }
 
         [HttpPut("{id}/login")]
-        public IActionResult Login(int id, LoginModel login)
+        public async Task<IActionResult> Login(int id, LoginUserCommand login)
         {
-            var result = _service.Login(id, login);
+            var result = await _mediator.Send(login);
 
             if (!result.IsSucess)
             {
                 return BadRequest(result.Message);
             }
 
-            return Ok(result);
+            return NoContent();
         }
     }
 }
