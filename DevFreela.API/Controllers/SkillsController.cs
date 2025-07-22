@@ -1,5 +1,7 @@
-﻿using DevFreela.Application.Models;
-using DevFreela.Application.Services;
+﻿using DevFreela.Application.Commands.InsertSkill;
+using DevFreela.Application.Queries.GetAllSkills;
+using DevFreela.Application.Queries.GetSkillById;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers
@@ -8,25 +10,34 @@ namespace DevFreela.API.Controllers
     [Route("api/skills")]
     public class SkillsController : ControllerBase
     {
-        private readonly ISkillService _service;
+        private readonly IMediator _mediator;
 
-        public SkillsController(ISkillService service)
+        public SkillsController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll(string search = "")
         {
-            var result = _service.GetAll();
+            var query = new GetAllSkillsQuery(search);
+
+            var result = await _mediator.Send(query);
+
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
 
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var result = _service.GetById(id);
+            var query = new GetSkillByIdQuery(id);
+
+            var result = await _mediator.Send(query);
 
             if (!result.IsSucess)
             {
@@ -37,16 +48,16 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(CreateSkillInputModel model)
+        public async Task<IActionResult> Post(InsertSkillCommand command)
         {
-            var result = _service.Insert(model);
+            var result = await _mediator.Send(command);
 
             if (!result.IsSucess)
             {
                 return BadRequest(result.Message);
             }
 
-            return CreatedAtAction(nameof(GetById), new { id = result.Data }, model);
+            return CreatedAtAction(nameof(GetById), new { id = result.Data }, command);
         }
     }
 }
