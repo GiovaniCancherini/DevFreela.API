@@ -60,6 +60,10 @@ namespace DevFreela.Application.Services
             {
                 return ResultViewModel<int>.Failure("50 characters maximum for the title.");
             }
+            if (model.Description.Length > 200)
+            {
+                return ResultViewModel<int>.Failure("200 characters maximum for description.");
+            }
 
             var project = model.ToEntity();
 
@@ -72,6 +76,10 @@ namespace DevFreela.Application.Services
         {
             model.IdProject = id;
 
+            if (model.Title.Length > 50)
+            {
+                return ResultViewModel<int>.Failure("50 characters maximum for the title.");
+            }
             if (model.Description.Length > 200)
             {
                 return ResultViewModel<int>.Failure("200 characters maximum for description.");
