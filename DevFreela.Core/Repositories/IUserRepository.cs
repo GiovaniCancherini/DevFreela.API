@@ -4,7 +4,7 @@ namespace DevFreela.Core.Repositories
 {
     public interface IUserRepository
     {
-        Task<List<User>?> GetAll();
+        Task<List<User>> GetAll(string? search);
         Task<User?> GetDetailsById(int id);
         Task<User?> GetById(int id);
         Task<int> Add(User user);

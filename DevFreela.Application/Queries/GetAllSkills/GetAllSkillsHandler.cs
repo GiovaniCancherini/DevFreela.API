@@ -15,16 +15,9 @@ namespace DevFreela.Application.Queries.GetAllSkills
 
         public async Task<ResultViewModel<List<SkillViewModel>>> Handle(GetAllSkillsQuery request, CancellationToken cancellationToken)
         {
-            var skills = await _repository.GetAll();
-            if (skills?.Count > 0)
-            {
-                skills = (List<Core.Entities.Skill>)skills
-                    .Where(s => request.Search == "" || s.Description.Contains(request.Search));
-            }
+            var skills = await _repository.GetAll(request.Search);
 
-            var model = skills?
-                .Select(SkillViewModel.FromEntity)
-                .ToList();
+            var model = skills.Select(SkillViewModel.FromEntity).ToList();
 
             return ResultViewModel<List<SkillViewModel>>.Success(model);
         }

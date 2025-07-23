@@ -15,19 +15,9 @@ namespace DevFreela.Application.Queries.GetAllProjects
 
         public async Task<ResultViewModel<List<ProjectItemViewModel>>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
         {
-            var projects = await _repository.GetAll();
+            var projects = await _repository.GetAll(request.Search, request.Page, request.Size);
 
-            if (projects?.Count > 0)
-            {
-                projects = (List<Core.Entities.Project>)projects
-                    .Where(p => !p.IsDeleted && (request.Search == "" || p.Title.Contains(request.Search)))
-                    .Skip(request.Page * request.Size)
-                    .Take(request.Size);
-            }
-                
-            var model = projects?
-                .Select(ProjectItemViewModel.FromEntity)
-                .ToList();
+            var model = projects.Select(ProjectItemViewModel.FromEntity).ToList();
 
             return ResultViewModel<List<ProjectItemViewModel>>.Success(model);
         }

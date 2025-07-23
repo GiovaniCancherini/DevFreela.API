@@ -4,7 +4,7 @@ namespace DevFreela.Core.Repositories
 {
     public interface ISkillRepository
     {
-        Task<List<Skill>?> GetAll();
+        Task<List<Skill>> GetAll(string? search);
         Task<Skill?> GetDetailsById(int id);
         Task<Skill?> GetById(int id);
         Task<int> Add(Skill skill);

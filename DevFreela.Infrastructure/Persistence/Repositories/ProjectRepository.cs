@@ -32,15 +32,24 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             return await _context.Projects.AnyAsync(p => p.Id == id);
         }
 
-        public async Task<List<Project>?> GetAll()
+        public async Task<List<Project>> GetAll(string? search, int page, int size)
         {
-            var projects = await _context.Projects
+            var query = _context.Projects
                 .Include(p => p.Client)
                 .Include(p => p.Freelancer)
                 .Include(p => p.Comments)
-                .ToListAsync();
+                .Where(p => !p.IsDeleted);
 
-            return projects;
+            if (!string.IsNullOrEmpty(search))
+            {
+                var loweredSearch = search.ToLower();
+                query = query.Where(p => p.Title.ToLower().Contains(loweredSearch));
+            }
+
+            return await query
+                .Skip(page * size)
+                .Take(size)
+                .ToListAsync();
         }
 
         public async Task<Project?> GetById(int id)

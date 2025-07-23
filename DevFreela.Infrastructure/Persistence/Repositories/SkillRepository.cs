@@ -26,13 +26,18 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             return await _context.Skills.AnyAsync(s => s.Id == id);
         }
 
-        public async Task<List<Skill>?> GetAll()
+        public async Task<List<Skill>> GetAll(string? search)
         {
-            var skills = await _context
-                .Skills
-                .ToListAsync();
+            var query = _context.Skills
+                .AsQueryable();
 
-            return skills;
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var loweredSearch = search.ToLower();
+                query = query.Where(s => s.Description.ToLower().Contains(loweredSearch));
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Skill?> GetById(int id)

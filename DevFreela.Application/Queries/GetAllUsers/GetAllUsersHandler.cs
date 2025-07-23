@@ -15,17 +15,9 @@ namespace DevFreela.Application.Queries.GetAllUsers
 
         public async Task<ResultViewModel<List<UserViewModel>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var users = await _repository.GetAll();
+            var users = await _repository.GetAll(request.Search);
 
-            if (users?.Count > 0)
-            {
-                users = (List<Core.Entities.User>)users
-                    .Where(p => request.Search == "" || p.FullName.Contains(request.Search));
-            }
-
-            var model = users?
-                .Select(UserViewModel.FromEntity)
-                .ToList();
+            var model = users.Select(UserViewModel.FromEntity).ToList();
 
             return ResultViewModel<List<UserViewModel>>.Success(model);
         }
