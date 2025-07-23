@@ -6,9 +6,9 @@ namespace DevFreela.Application.Commands.InsertProfilePictureInUser
 {
     public class InsertProfilePictureInUserHandler : IRequestHandler<InsertProfilePictureInUserCommand, ResultViewModel<int>>    
     {
-        private readonly IProjectRepository _repository;
+        private readonly IUserRepository _repository;
 
-        public InsertProfilePictureInUserHandler(IProjectRepository repository)
+        public InsertProfilePictureInUserHandler(IUserRepository repository)
         {
             _repository = repository;
         }
