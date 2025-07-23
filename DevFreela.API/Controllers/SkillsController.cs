@@ -9,7 +9,6 @@ namespace DevFreela.API.Controllers
     [ApiController]
     [Route("api/skills")]
     public class SkillsController : ControllerBase
-    public class SkillsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
