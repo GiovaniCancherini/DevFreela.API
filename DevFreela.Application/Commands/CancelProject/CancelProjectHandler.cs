@@ -1,23 +1,22 @@
 ﻿using DevFreela.Application.Models;
-using DevFreela.Infrastructure.Persistence;
+using DevFreela.Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace DevFreela.Application.Commands.CancelProject
 {
     public class CancelProjectHandler : IRequestHandler<CancelProjectCommand, ResultViewModel>
     {
-        private readonly DevFreelaDbContext _context;
+        private readonly IProjectRepository _repository;
 
-        public CancelProjectHandler(DevFreelaDbContext context)
+        public CancelProjectHandler(IProjectRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<ResultViewModel> Handle(CancelProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects.SingleOrDefaultAsync(p => p.Id == request.Id);
-            
+            var project = await _repository.GetById(request.Id);
+
             if (project is null)
             {
                 return ResultViewModel.Failure("Project not found.");
@@ -28,8 +27,7 @@ namespace DevFreela.Application.Commands.CancelProject
             }
             
             project.Cancel();
-            _context.Projects.Update(project);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _repository.Update(project);
 
             return ResultViewModel.Success();
         }
