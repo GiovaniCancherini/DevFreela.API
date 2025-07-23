@@ -1,9 +1,8 @@
 using DevFreela.API.ExceptionHandler;
 using DevFreela.Application.Models;
 using DevFreela.API.Services;
-using Microsoft.EntityFrameworkCore;
-using DevFreela.Infrastructure.Persistence;
 using DevFreela.Application;
+using DevFreela.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,18 +13,15 @@ builder.Services.Configure<FreelanceTotalCostConfig>(
 
 builder.Services.AddScoped<IConfigService, ConfigService>();
 
-// MY DB CONTEXT (DEFAULT LOCALHOST CONNECTION)
-builder.Services.AddDbContext<DevFreelaDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// MY!!! Register Application services
-builder.Services
-    .AddApplication();
-
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
+
+// Add Services to the container
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

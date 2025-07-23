@@ -1,30 +1,23 @@
 ﻿using DevFreela.Application.Models;
-using DevFreela.Infrastructure.Persistence;
+using DevFreela.Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace DevFreela.Application.Queries.GetAllUsers
 {
     public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, ResultViewModel<List<UserViewModel>>>
     {
-        private readonly DevFreelaDbContext _context;
-        public GetAllUsersHandler(DevFreelaDbContext context)
+        private readonly IUserRepository _repository;
+
+        public GetAllUsersHandler(IUserRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<ResultViewModel<List<UserViewModel>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var users = await _context
-                .Users
-                .Include(u => u.Skills)
-                    .ThenInclude(us => us.Skill)
-                .Where(p => request.Search == "" || p.FullName.Contains(request.Search))
-                .ToListAsync();
+            var users = await _repository.GetAll(request.Search);
 
-            var model = users
-                .Select(UserViewModel.FromEntity)
-                .ToList();
+            var model = users.Select(UserViewModel.FromEntity).ToList();
 
             return ResultViewModel<List<UserViewModel>>.Success(model);
         }
