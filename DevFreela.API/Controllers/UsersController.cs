@@ -43,10 +43,13 @@ namespace DevFreela.API.Controllers
             var result = await _mediator.Send(query);
 
             if (!result.IsSucess)
+            if (!result.IsSucess)
             {
+                return BadRequest(result.Message);
                 return BadRequest(result.Message);
             }
 
+            return Ok(result);
             return Ok(result);
         }
 
@@ -75,7 +78,7 @@ namespace DevFreela.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpPut("{id}/profile-picture")]
