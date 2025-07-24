@@ -1,6 +1,6 @@
 ﻿namespace DevFreela.Core.Enums
 {
-    public enum ProjectControllerEnum
+    public enum ProjectStatusEnum
     {
         Created = 0,
         InProgress = 1,
