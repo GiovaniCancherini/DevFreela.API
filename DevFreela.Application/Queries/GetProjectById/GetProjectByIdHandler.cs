@@ -7,6 +7,8 @@ namespace DevFreela.Application.Queries.GetProjectById
     public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, ResultViewModel<ProjectViewModel>>
     {
         private readonly IProjectRepository _repository;
+        private const string PROJECT_NOT_FOUND_MESSAGE = "Project not found.";
+        private const string PROJECT_DELETED_MESSAGE = "Project is deleted.";
 
         public GetProjectByIdHandler(IProjectRepository repository)
         {
@@ -19,11 +21,11 @@ namespace DevFreela.Application.Queries.GetProjectById
 
             if (project is null)
             {
-                return ResultViewModel<ProjectViewModel>.Failure("Project not found.");
+                return ResultViewModel<ProjectViewModel>.Failure(PROJECT_NOT_FOUND_MESSAGE);
             }
             if (project.IsDeleted)
             {
-                return ResultViewModel<ProjectViewModel>.Failure("Project is deleted.");
+                return ResultViewModel<ProjectViewModel>.Failure(PROJECT_DELETED_MESSAGE);
             }
 
             var model = ProjectViewModel.FromEntity(project);
