@@ -4,6 +4,10 @@ namespace DevFreela.Application.Notification.ProjectCreated
 {
     public class ProjectCreatedNotification : INotification
     {
+        public ProjectCreatedNotification()
+        {
+        }
+
         public ProjectCreatedNotification(int id, string? title, decimal totalCost)
         {
             Id = id;
