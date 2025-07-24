@@ -4,6 +4,8 @@ namespace DevFreela.Core.Entities
 {
     public class Project : BaseEntity
     {
+        public const string INVALID_STATE_MESSAGE = $"Only projects with status 'Created' can be started.";
+
         protected Project() { }
 
         public Project(string title, string description, int idClient, int idFreelancer, decimal totalCost)
@@ -15,7 +17,7 @@ namespace DevFreela.Core.Entities
             IdFreelancer = idFreelancer;
             TotalCost = totalCost;
 
-            Status = ProjectControllerEnum.Created;
+            Status = ProjectStatusEnum.Created;
             CreatedAt = DateTime.Now;
             Comments = new List<ProjectComment>();
         }
@@ -30,42 +32,43 @@ namespace DevFreela.Core.Entities
         public DateTime? StartedAt { get; private set; }
         public DateTime? FinishedAt { get; private set; }
         public DateTime? CompletedAt { get; private set; }
-        public ProjectControllerEnum Status { get; private set; }
+        public ProjectStatusEnum Status { get; private set; }
         public List<ProjectComment> Comments { get; private set; }
 
         public void Start()
         {
-            if (Status == ProjectControllerEnum.Created)
+            if (Status != ProjectStatusEnum.Created)
             {
-                Status = ProjectControllerEnum.InProgress;
-                StartedAt = DateTime.Now;
+                throw new InvalidOperationException(INVALID_STATE_MESSAGE);
             }
+            Status = ProjectStatusEnum.InProgress;
+            StartedAt = DateTime.Now;
         }
 
         public void Cancel()
         {
-            if (Status == ProjectControllerEnum.InProgress)
+            if (Status == ProjectStatusEnum.InProgress)
             {
-                Status = ProjectControllerEnum.Cancelled;
+                Status = ProjectStatusEnum.Cancelled;
                 FinishedAt = DateTime.Now;
             }
         }
 
         public void Complete()
         {
-            if (Status == ProjectControllerEnum.PaymentPending ||
-                Status == ProjectControllerEnum.InProgress)
+            if (Status == ProjectStatusEnum.PaymentPending ||
+                Status == ProjectStatusEnum.InProgress)
             {
-                Status = ProjectControllerEnum.Completed;
+                Status = ProjectStatusEnum.Completed;
                 CompletedAt = DateTime.Now;
             }
         }
 
         public void SetPaymentPending()
         {
-            if (Status == ProjectControllerEnum.InProgress)
+            if (Status == ProjectStatusEnum.InProgress)
             {
-                Status = ProjectControllerEnum.PaymentPending;
+                Status = ProjectStatusEnum.PaymentPending;
             }
         }
 
