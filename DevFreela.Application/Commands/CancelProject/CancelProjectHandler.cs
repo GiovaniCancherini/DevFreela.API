@@ -7,6 +7,8 @@ namespace DevFreela.Application.Commands.CancelProject
     public class CancelProjectHandler : IRequestHandler<CancelProjectCommand, ResultViewModel>
     {
         private readonly IProjectRepository _repository;
+        private const string PROJECT_NOT_FOUND_MESSAGE = "Project not found.";
+        private const string PROJECT_DELETED_MESSAGE = "Project is deleted.";
 
         public CancelProjectHandler(IProjectRepository repository)
         {
@@ -19,13 +21,13 @@ namespace DevFreela.Application.Commands.CancelProject
 
             if (project is null)
             {
-                return ResultViewModel.Failure("Project not found.");
+                return ResultViewModel.Failure(PROJECT_NOT_FOUND_MESSAGE);
             }
             if (project.IsDeleted)
             {
-                return ResultViewModel.Failure("Project is deleted.");
+                return ResultViewModel.Failure(PROJECT_DELETED_MESSAGE);
             }
-            
+
             project.Cancel();
             await _repository.Update(project);
 
