@@ -18,9 +18,9 @@ namespace DevFreela.Application.Commands.InsertSkill
         {
             var skill = new Skill(request.Decription);
 
-            await _repository.Add(skill);
+            var idSkillCreated = await _repository.Add(skill);
 
-            return ResultViewModel<int>.Success(skill.Id);
+            return ResultViewModel<int>.Success(idSkillCreated);
         }
     }
 }

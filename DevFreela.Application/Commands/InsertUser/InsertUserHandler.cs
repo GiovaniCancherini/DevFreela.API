@@ -18,9 +18,9 @@ namespace DevFreela.Application.Commands.InsertUser
         {
             var user = new User(request.FullName, request.Email, request.BirthDate);
 
-            await _repository.Add(user);
+            var idUserCreated = await _repository.Add(user);
 
-            return ResultViewModel<int>.Success(user.Id);
+            return ResultViewModel<int>.Success(idUserCreated);
         }
     }
 }

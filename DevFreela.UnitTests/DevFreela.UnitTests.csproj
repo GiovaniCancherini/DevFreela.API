@@ -32,4 +32,9 @@
     <ProjectReference Include="..\DevFreela.Core\DevFreela.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Validators\" />
+    <Folder Include="Application\Queries\" />
+  </ItemGroup>
+
 </Project>

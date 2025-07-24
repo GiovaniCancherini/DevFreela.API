@@ -6,7 +6,7 @@ using MediatR;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace DevFreela.UnitTests.Application
+namespace DevFreela.UnitTests.Application.Commands
 {
     public class InsertProjectHandlerTests
     {
