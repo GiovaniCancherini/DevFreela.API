@@ -19,12 +19,13 @@ namespace DevFreela.Application.Commands.InsertProject
         public async Task<ResultViewModel<int>> Handle(InsertProjectCommand request, CancellationToken cancellationToken)
         {
             var project = request.ToEntity();
-            await _repository.Add(project);
+
+            var idProjectCreated = await _repository.Add(project);
 
             var projectCreatedNotification = new ProjectCreatedNotification(project.Id, project.Title, project.TotalCost);
             await _mediator.Publish(projectCreatedNotification, cancellationToken);
 
-            return ResultViewModel<int>.Success(project.Id);
+            return ResultViewModel<int>.Success(idProjectCreated);
         }
     }
 }

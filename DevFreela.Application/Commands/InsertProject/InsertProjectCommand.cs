@@ -6,6 +6,8 @@ namespace DevFreela.Application.Commands.InsertProject
 {
     public class InsertProjectCommand : IRequest<ResultViewModel<int>>
     {
+        public InsertProjectCommand() { }
+
         public InsertProjectCommand(int idClient, int idFreeLancer, string title, string description, decimal totalCost)
         {
             IdClient = idClient;

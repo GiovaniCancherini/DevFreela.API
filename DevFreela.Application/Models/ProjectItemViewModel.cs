@@ -1,6 +1,4 @@
 ﻿using DevFreela.Core.Entities;
-using DevFreela.Core.Enums;
-using System.Xml.Linq;
 
 namespace DevFreela.Application.Models
 {

@@ -7,6 +7,7 @@ namespace DevFreela.Application.Queries.GetSkillById
     public class GetSkillByIdHandler : IRequestHandler<GetSkillByIdQuery, ResultViewModel<SkillViewModel>>
     {
         private readonly ISkillRepository _repository;
+        private const string SKILL_NOT_EXIST_MESSAGE = "Skill not exist.";
 
         public GetSkillByIdHandler(ISkillRepository repository)
         {
@@ -19,7 +20,7 @@ namespace DevFreela.Application.Queries.GetSkillById
 
             if (skill is null)
             {
-                return ResultViewModel<SkillViewModel>.Failure("Skill not exist.");
+                return ResultViewModel<SkillViewModel>.Failure(SKILL_NOT_EXIST_MESSAGE);
             }
 
             var model = SkillViewModel.FromEntity(skill);
