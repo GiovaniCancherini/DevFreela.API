@@ -68,7 +68,7 @@ namespace DevFreela.UnitTests.Application
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal(PROJECT_NOT_FOUND_MESSAGE , result.Message);
+            Assert.Equal(PROJECT_NOT_FOUND_MESSAGE, result.Message);
             await repository.Received(1).GetById(Arg.Any<int>());
             await repository.DidNotReceive().Update(Arg.Any<Project>());
         }
@@ -103,7 +103,7 @@ namespace DevFreela.UnitTests.Application
 
         #region Exception
         [Fact]
-        public async Task RepositoryThrowsException_Delete_ThrowsException_NSubstitute()
+        public async Task RepositoryThrowsException_Delete_Exception_NSubstitute()
         {
             const int ID = 1;
 

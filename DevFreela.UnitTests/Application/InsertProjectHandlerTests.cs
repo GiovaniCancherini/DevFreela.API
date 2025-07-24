@@ -1,5 +1,4 @@
 ﻿using DevFreela.Application.Commands.InsertProject;
-using DevFreela.Application.Models;
 using DevFreela.Application.Notification.ProjectCreated;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
@@ -83,7 +82,7 @@ namespace DevFreela.UnitTests.Application
 
         #region Exception
         [Fact]
-        public async Task RepositoryThrowsException_Insert_ThrowsException_NSubstitute()
+        public async Task RepositoryThrowsException_Insert_Exception_NSubstitute()
         {
             // Arrange
             var repository = Substitute.For<IProjectRepository>();
@@ -111,7 +110,7 @@ namespace DevFreela.UnitTests.Application
         }
 
         [Fact]
-        public async Task MediatorPublishThrowsException_Insert_ThrowsException_NSubstitute()
+        public async Task MediatorPublishThrowsException_Insert_Exception_NSubstitute()
         {
             // Arrange
             var repository = Substitute.For<IProjectRepository>();
