@@ -1,12 +1,7 @@
 ﻿using DevFreela.Application.Commands.InsertSkill;
-using DevFreela.Application.Models;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using NSubstitute;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace DevFreela.UnitTests.Application.Commands
 {

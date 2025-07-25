@@ -7,7 +7,7 @@ namespace DevFreela.Application.Queries.GetSkillById
     public class GetSkillByIdHandler : IRequestHandler<GetSkillByIdQuery, ResultViewModel<SkillViewModel>>
     {
         private readonly ISkillRepository _repository;
-        private const string SKILL_NOT_EXIST_MESSAGE = "Skill not exist.";
+        protected internal const string SKILL_NOT_EXIST_MESSAGE = "Skill not exist.";
 
         public GetSkillByIdHandler(ISkillRepository repository)
         {

@@ -8,9 +8,6 @@ namespace DevFreela.UnitTests.Application.Commands
 {
     public class UpdateProjectHandlerTests
     {
-        public const string PROJECT_NOT_FOUND_MESSAGE = "Project not found.";
-        public const string PROJECT_DELETED_MESSAGE = "Project is deleted.";
-
         private const int PROJECT_ID = 1;
 
         #region Success
@@ -53,7 +50,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal("50 characters maximum for the title.", result.Message);
+            Assert.Equal(UpdateProjectHandler.PROJECT_TITLE_MAX_50_MESSAGE, result.Message);
 
             await repository.DidNotReceive().GetById(Arg.Any<int>());
             await repository.DidNotReceive().Update(Arg.Any<Project>());
@@ -74,7 +71,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal("200 characters maximum for description.", result.Message);
+            Assert.Equal(UpdateProjectHandler.PROJECT_DESCRIPTION_MAX_200_MESSAGE, result.Message);
 
             await repository.DidNotReceive().GetById(Arg.Any<int>());
             await repository.DidNotReceive().Update(Arg.Any<Project>());
@@ -95,7 +92,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal(PROJECT_NOT_FOUND_MESSAGE, result.Message);
+            Assert.Equal(UpdateProjectHandler.PROJECT_NOT_FOUND_MESSAGE, result.Message);
 
             await repository.Received(1).GetById(PROJECT_ID);
             await repository.DidNotReceive().Update(Arg.Any<Project>());
@@ -119,7 +116,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal(PROJECT_DELETED_MESSAGE, result.Message);
+            Assert.Equal(UpdateProjectHandler.PROJECT_DELETED_MESSAGE, result.Message);
 
             await repository.Received(1).GetById(PROJECT_ID);
             await repository.DidNotReceive().Update(Arg.Any<Project>());

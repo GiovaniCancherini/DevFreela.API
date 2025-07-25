@@ -1,4 +1,5 @@
 ﻿using DevFreela.Application.Models;
+using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using MediatR;
 
@@ -16,6 +17,11 @@ namespace DevFreela.Application.Queries.GetAllUsers
         public async Task<ResultViewModel<List<UserViewModel>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await _repository.GetAll(request.Search);
+
+            if (users is null)
+            {
+                return ResultViewModel<List<UserViewModel>>.Success(null);
+            }
 
             var model = users.Select(UserViewModel.FromEntity).ToList();
 

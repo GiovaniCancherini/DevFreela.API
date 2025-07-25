@@ -8,8 +8,6 @@ namespace DevFreela.UnitTests.Application.Commands
 {
     public class InsertCommentInProjectHandlerTests
     {
-        private const string PROJECT_NOT_EXIST_MESSAGE = "Project not exist.";
-
         #region Success
         [Fact]
         public async Task ProjectExists_InsertComment_Success_NSubstitute()
@@ -57,7 +55,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal(PROJECT_NOT_EXIST_MESSAGE, result.Message);
+            Assert.Equal(InsertCommentInProjectHandler.PROJECT_NOT_EXIST_MESSAGE, result.Message);
             await repository.Received(1).Exists(ID_PROJECT);
             await repository.DidNotReceive().AddComment(Arg.Any<ProjectComment>());
         }
