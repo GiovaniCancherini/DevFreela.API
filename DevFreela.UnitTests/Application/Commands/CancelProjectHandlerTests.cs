@@ -8,9 +8,6 @@ namespace DevFreela.UnitTests.Application.Commands
 {
     public class CancelProjectHandlerTests
     {
-        private const string PROJECT_NOT_FOUND_MESSAGE = "Project not found.";
-        private const string PROJECT_DELETED_MESSAGE = "Project is deleted.";
-
         #region Sucess
         [Fact]
         public async Task ProjectExists_Cancel_Success_NSubstitute()
@@ -55,7 +52,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal(PROJECT_NOT_FOUND_MESSAGE, result.Message);
+            Assert.Equal(CancelProjectHandler.PROJECT_NOT_FOUND_MESSAGE, result.Message);
             await repository.Received(1).GetById(ID);
             await repository.DidNotReceive().Update(Arg.Any<Project>());
         }
@@ -80,7 +77,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             // Assert
             Assert.False(result.IsSucess);
-            Assert.Equal(PROJECT_DELETED_MESSAGE, result.Message);
+            Assert.Equal(CancelProjectHandler.PROJECT_DELETED_MESSAGE, result.Message);
             await repository.Received(1).GetById(ID);
             await repository.DidNotReceive().Update(Arg.Any<Project>());
         }

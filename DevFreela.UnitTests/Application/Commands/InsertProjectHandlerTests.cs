@@ -3,6 +3,7 @@ using DevFreela.Application.Notification.ProjectCreated;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using MediatR;
+using Moq;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
@@ -46,6 +47,78 @@ namespace DevFreela.UnitTests.Application.Commands
             Assert.Equal(ID, result.Data);
             await repository.Received(1).Add(Arg.Any<Project>());
             await mediator.Received(1).Publish(Arg.Any<ProjectCreatedNotification>(), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task InputDataAreOk_Insert_Sucess_Moq_FirstOption()
+        {
+            const int ID = 1;
+
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            mockMediator
+                .Setup(m => m.Publish(It.IsAny<ProjectCreatedNotification>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            var mockRepository = new Mock<IProjectRepository>();
+            mockRepository
+                .Setup(r => r.Add(It.IsAny<Project>()))
+                .ReturnsAsync(ID);
+
+            var command = new InsertProjectCommand
+            {
+                Title = "New Project",
+                Description = "Project Description",
+                IdClient = 1,
+                IdFreeLancer = 2,
+                TotalCost = 1000.00m
+            };
+
+            // var handler = new InsertProjectHandler(mockMediator.Object, mockRepository.Object);
+            var handler = new InsertProjectHandler(mockMediator.Object, mockRepository.Object);
+
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsSucess);
+            Assert.Equal(ID, result.Data);
+
+            mockMediator.Verify(m => m.Publish(It.IsAny<ProjectCreatedNotification>(), It.IsAny<CancellationToken>()), Times.Once);
+            mockRepository.Verify(r => r.Add(It.IsAny<Project>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task InputDataAreOk_Insert_Sucess_Moq_SecondOption()
+        {
+            const int ID = 1;
+
+            // Arrange
+            var mediator = Mock.Of<IMediator>(m =>
+                m.Publish(It.IsAny<ProjectCreatedNotification>(), It.IsAny<CancellationToken>()) == Task.CompletedTask);
+            var repository = Mock.Of<IProjectRepository>(r =>
+                r.Add(It.IsAny<Project>()) == Task.FromResult(ID));
+
+            var command = new InsertProjectCommand
+            {
+                Title = "New Project",
+                Description = "Project Description",
+                IdClient = 1,
+                IdFreeLancer = 2,
+                TotalCost = 1000.00m
+            };
+
+            // var handler = new InsertProjectHandler(mockMediator.Object, mockRepository.Object);
+            var handler = new InsertProjectHandler(mediator, repository);
+
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsSucess);
+            Assert.Equal(ID, result.Data);
+
+            Mock.Get(mediator).Verify(m => m.Publish(It.IsAny<ProjectCreatedNotification>(), It.IsAny<CancellationToken>()), Times.Once);
+            Mock.Get(repository).Verify(r => r.Add(It.IsAny<Project>()), Times.Once);
         }
         #endregion
 

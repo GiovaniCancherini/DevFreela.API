@@ -8,7 +8,7 @@ namespace DevFreela.Application.Commands.InsertCommentInProject
     public class InsertCommentInProjectHandler : IRequestHandler<InsertCommentInProjectCommand, ResultViewModel<int>>    
     {
         private readonly IProjectRepository _repository;
-        private const string PROJECT_NOT_EXIST_MESSAGE = "Project not exist.";
+        protected internal const string PROJECT_NOT_EXIST_MESSAGE = "Project not exist.";
 
         public InsertCommentInProjectHandler(IProjectRepository repository)
         {

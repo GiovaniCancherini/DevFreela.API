@@ -7,8 +7,10 @@ namespace DevFreela.Application.Commands.UpdateProject
     public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, ResultViewModel>    
     {
         private readonly IProjectRepository _repository;
-        private const string PROJECT_NOT_FOUND_MESSAGE = "Project not found.";
-        private const string PROJECT_DELETED_MESSAGE = "Project is deleted.";
+        protected internal const string PROJECT_NOT_FOUND_MESSAGE = "Project not found.";
+        protected internal const string PROJECT_DELETED_MESSAGE = "Project is deleted.";
+        protected internal const string PROJECT_TITLE_MAX_50_MESSAGE = "50 characters maximum for the title.";
+        protected internal const string PROJECT_DESCRIPTION_MAX_200_MESSAGE = "200 characters maximum for description.";
 
         public UpdateProjectHandler(IProjectRepository repository)
         {
@@ -19,11 +21,11 @@ namespace DevFreela.Application.Commands.UpdateProject
         {
             if (request.Title.Length > 50)
             {
-                return ResultViewModel.Failure("50 characters maximum for the title.");
+                return ResultViewModel.Failure(PROJECT_TITLE_MAX_50_MESSAGE);
             }
             if (request.Description.Length > 200)
             {
-                return ResultViewModel.Failure("200 characters maximum for description.");
+                return ResultViewModel.Failure(PROJECT_DESCRIPTION_MAX_200_MESSAGE);
             }
 
             var project = await _repository.GetById(request.IdProject);

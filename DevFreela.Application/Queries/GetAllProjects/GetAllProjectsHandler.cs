@@ -17,6 +17,11 @@ namespace DevFreela.Application.Queries.GetAllProjects
         {
             var projects = await _repository.GetAll(request.Search, request.Page, request.Size);
 
+            if (projects is null)
+            {
+                return ResultViewModel<List<ProjectItemViewModel>>.Success(null);
+            }
+
             var model = projects.Select(ProjectItemViewModel.FromEntity).ToList();
 
             return ResultViewModel<List<ProjectItemViewModel>>.Success(model);
