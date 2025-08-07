@@ -5,12 +5,12 @@ namespace DevFreela.Application.Commands.LoginUser
 {
     public class LoginUserCommand : IRequest<ResultViewModel>
     {
-        public LoginUserCommand(string userName, string password)
+        public LoginUserCommand(string email, string password)
         {
-            UserName = userName;
+            Email = email;
             Password = password;
         }
-        public string UserName { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }

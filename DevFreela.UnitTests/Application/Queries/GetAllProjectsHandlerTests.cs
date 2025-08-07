@@ -20,8 +20,8 @@ namespace DevFreela.UnitTests.Application.Queries
             var project = new Project("New Project", "Project Description", 1, 2, 1000.00m);
             project.Id = ID;
 
-            var clientTest = new User("Client", "email@email.com", DateTime.Now);
-            var freelancerTest = new User("Freelancer", "email@email.com", DateTime.Now);
+            var clientTest = new User("Client", "email@email.com", DateTime.Now, "123", "ADM");
+            var freelancerTest = new User("Freelancer", "email@email.com", DateTime.Now, "123", "ADM");
             typeof(Project)
                 .GetProperty("Client")!
                 .SetValue(project, clientTest);

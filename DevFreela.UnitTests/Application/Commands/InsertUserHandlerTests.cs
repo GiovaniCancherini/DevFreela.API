@@ -1,6 +1,7 @@
 ﻿using DevFreela.Application.Commands.InsertUser;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
+using DevFreela.Infrastructure.Auth;
 using NSubstitute;
 
 namespace DevFreela.UnitTests.Application.Commands
@@ -15,16 +16,18 @@ namespace DevFreela.UnitTests.Application.Commands
             // Arrange
             const int expectedId = 1;
 
+            var auth = Substitute.For<IAuthService>();
             var repository = Substitute.For<IUserRepository>();
             repository.Add(Arg.Any<User>())
                       .Returns(Task.FromResult(expectedId));
 
-            var handler = new InsertUserHandler(repository);
+            var handler = new InsertUserHandler(repository, auth);
 
             var command = new InsertUserCommand(
                 "John Doe",
                 "john.doe@example.com",
                 new DateTime(1990, 1, 1)
+                , "123", "ADM"
             );
 
             // Act
@@ -51,16 +54,18 @@ namespace DevFreela.UnitTests.Application.Commands
         public async Task GivenRepositoryThrowsException_InsertUser_ThrowsException_NSubstitute()
         {
             // Arrange
+            var auth = Substitute.For<IAuthService>();
             var repository = Substitute.For<IUserRepository>();
             repository.Add(Arg.Any<User>())
                       .Returns<Task<int>>(x => throw new Exception("Database error"));
 
-            var handler = new InsertUserHandler(repository);
+            var handler = new InsertUserHandler(repository, auth);
 
             var command = new InsertUserCommand(
                 "John Doe",
                 "john.doe@example.com",
                 new DateTime(1990, 1, 1)
+                , "123", "ADM"
             );
 
             // Act & Assert

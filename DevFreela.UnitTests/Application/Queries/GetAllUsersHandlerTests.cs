@@ -1,9 +1,7 @@
-﻿using DevFreela.Application.Models;
-using DevFreela.Application.Queries.GetAllUsers;
+﻿using DevFreela.Application.Queries.GetAllUsers;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Moq;
-using Xunit;
 
 namespace DevFreela.UnitTests.Application.Queries
 {
@@ -15,7 +13,7 @@ namespace DevFreela.UnitTests.Application.Queries
         public async Task UsersExist_GetAllUsers_Success_Moq()
         {
             // Arrange
-            var user = new User("User Name", "user@email.com", DateTime.Now);
+            var user = new User("User Name", "user@email.com", DateTime.Now, "123", "ADM");
             user.Id = 1;
 
             var repository = Mock.Of<IUserRepository>(r =>

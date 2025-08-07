@@ -63,6 +63,16 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             return user;
         }
 
+        public async Task<User?> GetByLogin(string email, string password)
+        {
+            var user = await _context.Users
+                .Include(u => u.Skills)
+                    .ThenInclude(us => us.Skill)
+                .SingleOrDefaultAsync(u => u.Email == email && u.Password == password);
+
+            return user;
+        }
+
         public async Task<User?> GetDetailsById(int id)
         {
             var user = await _context.Users
