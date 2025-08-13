@@ -5,7 +5,6 @@ using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Application.Queries.GetAllUsers;
 using DevFreela.Application.Queries.GetUserById;
 using DevFreela.Core.Enums;
-using DevFreela.Infrastructure.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +17,14 @@ namespace DevFreela.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IAuthService _auth;
 
-        public UsersController(IMediator mediator, IAuthService auth)
+        public UsersController(IMediator mediator)
         {
             _mediator = mediator;
-            _auth = auth;
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{UserRole.Client}, {UserRole.Freelancer}")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Get(string search = "")
         {
             var query = new GetAllUsersQuery(search);
@@ -43,7 +40,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = $"{UserRole.Client}, {UserRole.Freelancer}")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> GetById(int id)
         {
             var query = new GetUserByIdQuery(id);
@@ -73,7 +70,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost("{id}/skills")]
-        [Authorize(Roles = $"{UserRole.Client}, {UserRole.Freelancer}")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> PostSkills(int id, InsertSkillsInUserCommand command)
         {
             command.Id = id;
@@ -106,7 +103,7 @@ namespace DevFreela.API.Controllers
 
         [HttpPut("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(int id, LoginUserCommand command)
+        public async Task<IActionResult> Login(LoginUserCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -115,7 +112,7 @@ namespace DevFreela.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok();
+            return Ok(result);
         }
     }
 }

@@ -6,7 +6,7 @@ using DevFreela.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configuração de serviços customizados
 builder.Services.Configure<FreelanceTotalCostConfig>(
     builder.Configuration.GetSection("FreelanceTotalCostConfig")
     );
@@ -18,18 +18,14 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 
-// Add Services to the container
+// Add Application & Infrastructure layers
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+// ===== Pipeline =====
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -37,9 +33,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler();
-
 app.UseHttpsRedirection();
 
+// Ordem correta: Authentication antes de Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

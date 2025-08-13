@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace DevFreela.Infrastructure
@@ -18,7 +19,8 @@ namespace DevFreela.Infrastructure
             services
                 .AddData(configuration)
                 .AddRepositories()
-                .AddAuth(configuration);
+                .AddAuth(configuration)
+                .AddSwaggerDocumentation();
 
             return services;
         }
@@ -66,6 +68,47 @@ namespace DevFreela.Infrastructure
                             Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
                     };
                 });
+
+            return services;
+        }
+
+        private static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
+        {
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "DevFreela API",
+                    Version = "v1"
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter the JWT token like this: Bearer your_token"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             return services;
         }

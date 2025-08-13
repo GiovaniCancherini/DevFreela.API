@@ -33,8 +33,14 @@ namespace DevFreela.Infrastructure.Auth
         {
             var issuer = _configuration["Jwt:Issuer"];
             var audience = _configuration["Jwt:Audience"];
+
+            var keyFromConfig = _configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(keyFromConfig))
+            {
+                throw new Exception("JWT Key not configured!");
+            }
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                Encoding.UTF8.GetBytes(keyFromConfig));
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             
