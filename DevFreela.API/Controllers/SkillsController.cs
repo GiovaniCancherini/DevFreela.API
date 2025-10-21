@@ -1,13 +1,16 @@
 using DevFreela.Application.Commands.InsertSkill;
 using DevFreela.Application.Queries.GetAllSkills;
 using DevFreela.Application.Queries.GetSkillById;
+using DevFreela.Core.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers
 {
     [ApiController]
     [Route("api/skills")]
+    [Authorize]
     public class SkillsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -18,6 +21,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> GetAll(string search = "")
         {
             var query = new GetAllSkillsQuery(search);
@@ -33,6 +37,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> GetById(int id)
         {
             var query = new GetSkillByIdQuery(id);
@@ -48,6 +53,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Post(InsertSkillCommand command)
         {
             var result = await _mediator.Send(command);

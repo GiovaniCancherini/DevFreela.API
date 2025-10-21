@@ -7,13 +7,16 @@ using DevFreela.Application.Commands.StartProject;
 using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Queries.GetProjectById;
+using DevFreela.Core.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers
 {
     [ApiController]
     [Route("api/projects")]
+    [Authorize]
     public class ProjectsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -25,6 +28,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Get(string search = "", int page = 0, int size = 10)
         {
             var query = new GetAllProjectsQuery(search, page, size);
@@ -40,6 +44,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> GetById(int id)
         {
             var query = new GetProjectByIdQuery(id);
@@ -55,6 +60,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Post(InsertProjectCommand command)
         {
             var result = await _mediator.Send(command);
@@ -68,6 +74,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Put(int id, UpdateProjectCommand command)
         {
             command.IdProject = id;
@@ -83,6 +90,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteProjectCommand(id));
@@ -96,6 +104,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}/start")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Start(int id)
         {
             var result = await _mediator.Send(new StartProjectCommand(id));
@@ -109,6 +118,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}/cancel")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Cancel(int id)
         {
             var result = await _mediator.Send(new CancelProjectCommand(id));
@@ -122,6 +132,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}/complete")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> Complete(int id)
         {
             var result = await _mediator.Send(new CompleteProjectCommand(id));
@@ -135,6 +146,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost("{id}/comments")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
         public async Task<IActionResult> PostComment(int id, InsertCommentInProjectCommand command)
         {
             command.IdProject = id;

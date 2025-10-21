@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 
 namespace DevFreela.Infrastructure
@@ -65,7 +66,8 @@ namespace DevFreela.Infrastructure
                         ValidIssuer = configuration["Jwt:Issuer"],
                         ValidAudience = configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                            Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+                        RoleClaimType = ClaimTypes.Role
                     };
                 });
 
