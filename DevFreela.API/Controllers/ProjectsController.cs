@@ -1,4 +1,3 @@
-using DevFreela.API.Services;
 using DevFreela.Application.Commands.CancelProject;
 using DevFreela.Application.Commands.CompleteProject;
 using DevFreela.Application.Commands.DeleteProject;
@@ -6,12 +5,10 @@ using DevFreela.Application.Commands.InsertCommentInProject;
 using DevFreela.Application.Commands.InsertProject;
 using DevFreela.Application.Commands.StartProject;
 using DevFreela.Application.Commands.UpdateProject;
-using DevFreela.Application.Models;
 using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Queries.GetProjectById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace DevFreela.API.Controllers
 {
@@ -19,18 +16,11 @@ namespace DevFreela.API.Controllers
     [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
-        private readonly FreelanceTotalCostConfig _config;
-        private readonly IConfigService _configServic;
         private readonly IMediator _mediator;
 
         public ProjectsController(
-            IOptions<FreelanceTotalCostConfig> option,
-            IConfigService configService,
             IMediator mediator)
         {
-            _config = option.Value;
-            _configServic = configService;
-
             _mediator = mediator;
         }
 
