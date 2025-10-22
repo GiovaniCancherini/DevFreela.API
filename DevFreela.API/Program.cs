@@ -16,6 +16,8 @@ builder.Services.AddScoped<IConfigService, ConfigService>();
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddControllers();
 
 // Add Application & Infrastructure layers

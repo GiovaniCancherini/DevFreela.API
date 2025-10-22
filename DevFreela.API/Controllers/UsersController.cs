@@ -1,7 +1,11 @@
+using DevFreela.Application.Commands.ChangePassword;
 using DevFreela.Application.Commands.InsertProfilePictureInUser;
 using DevFreela.Application.Commands.InsertSkillsInUser;
 using DevFreela.Application.Commands.InsertUser;
 using DevFreela.Application.Commands.LoginUser;
+using DevFreela.Application.Commands.PasswordRecoveryRequest;
+using DevFreela.Application.Commands.ValidateRecoveryCode;
+using DevFreela.Application.Models;
 using DevFreela.Application.Queries.GetAllUsers;
 using DevFreela.Application.Queries.GetUserById;
 using DevFreela.Core.Enums;
@@ -113,6 +117,48 @@ namespace DevFreela.API.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpPost("password-recovery/request")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
+        public async Task<IActionResult> RequestPasswordRecovery(PasswordRecoveryRequestCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("password-recovery/validate")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
+        public async Task<IActionResult> ValidateRecoveryCode(ValidateRecoveryCodeCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("password-recovery/change")]
+        [Authorize(Roles = $"{UserRole.Client},{UserRole.Freelancer}")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSucess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return NoContent();
         }
     }
 }

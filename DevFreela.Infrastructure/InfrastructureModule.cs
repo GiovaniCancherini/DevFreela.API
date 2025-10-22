@@ -1,5 +1,6 @@
 ﻿using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Auth;
+using DevFreela.Infrastructure.Notifications;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SendGrid.Extensions.DependencyInjection;
 using System.Security.Claims;
 using System.Text;
 
@@ -21,7 +23,8 @@ namespace DevFreela.Infrastructure
                 .AddData(configuration)
                 .AddRepositories()
                 .AddAuth(configuration)
-                .AddSwaggerDocumentation();
+                .AddSwaggerDocumentation()
+                .AddEmailService(configuration);
 
             return services;
         }
@@ -111,6 +114,18 @@ namespace DevFreela.Infrastructure
                     }
                 });
             });
+
+            return services;
+        }
+
+        private static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSendGrid(o =>
+            {
+                o.ApiKey = configuration.GetValue<string>("SendGrid:ApiKey") ?? throw new InvalidOperationException("SendGrid API key is not configured.");
+            });
+
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

@@ -8,8 +8,10 @@ namespace DevFreela.Core.Repositories
         Task<User?> GetDetailsById(int id);
         Task<User?> GetById(int id);
         Task<User?> GetByLogin(string email, string password);
+        Task<User?> GetByEmail(string email);
         Task<int> Add(User user);
         Task Update(User user);
+        Task<bool> UpdatePassword(int id, string newPasswordHash);
         Task AddSkills(List<UserSkill> skills);
         Task AddProfilePicture(User user);
         Task<bool> Exists(int id);
