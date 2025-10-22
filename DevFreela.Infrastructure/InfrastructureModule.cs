@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SendGrid.Extensions.DependencyInjection;
 using System.Security.Claims;
 using System.Text;
 
@@ -120,9 +119,16 @@ namespace DevFreela.Infrastructure
 
         private static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSendGrid(o =>
+            var apiKey = configuration.GetValue<string>("Brevo:ApiKey") ?? throw new InvalidOperationException("Brevo API key is not configured.");
+
+            services.AddSingleton(sp =>
             {
-                o.ApiKey = configuration.GetValue<string>("SendGrid:ApiKey") ?? throw new InvalidOperationException("SendGrid API key is not configured.");
+                var apiInstance = new brevo_csharp.Api.TransactionalEmailsApi();
+                apiInstance.Configuration = new brevo_csharp.Client.Configuration
+                {
+                    ApiKey = new Dictionary<string, string> { { "api-key", apiKey } }
+                };
+                return apiInstance;
             });
 
             services.AddScoped<IEmailService, EmailService>();

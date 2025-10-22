@@ -1,37 +1,40 @@
-﻿using SendGrid;
-using SendGrid.Helpers.Mail;
+﻿using brevo_csharp.Api;
+using brevo_csharp.Model;
 using Microsoft.Extensions.Configuration;
 
 namespace DevFreela.Infrastructure.Notifications
 {
     public class EmailService : IEmailService
     {
-        private readonly ISendGridClient _client;
+        private readonly TransactionalEmailsApi _client;
         private readonly string _fromEmail;
         private readonly string _fromName;
 
-        public EmailService(ISendGridClient client, IConfiguration configuration)
+        public EmailService(TransactionalEmailsApi client, IConfiguration configuration)
         {
             _client = client;
 
-            _fromEmail = configuration.GetValue<string>("SendGrid:FromEmail") ?? throw new InvalidOperationException("SendGrid:FromEmail configuration value is missing.");
-            _fromName = configuration.GetValue<string>("SendGrid:FromName") ?? throw new InvalidOperationException("SendGrid:FromName configuration value is missing.");
+            _fromEmail = configuration.GetValue<string>("Brevo:FromEmail") ?? throw new InvalidOperationException("Brevo:FromEmail configuration value is missing.");
+            _fromName = configuration.GetValue<string>("Brevo:FromName") ?? throw new InvalidOperationException("Brevo:FromName configuration value is missing.");
         }
 
-        public Task SendAsync(string email, string subject, string body)
+        public async System.Threading.Tasks.Task SendAsync(string email, string subject, string body)
         {
-            var sendGridMessage = new SendGridMessage
+            var sendSmtpEmail = new SendSmtpEmail(
+                to: new List<SendSmtpEmailTo> { new SendSmtpEmailTo(email) },
+                sender: new SendSmtpEmailSender(_fromName, _fromEmail),
+                subject: subject,
+                htmlContent: body
+            );
+
+            try
             {
-                From = new EmailAddress(_fromEmail, _fromName),
-                Subject = subject
-            };
-
-            sendGridMessage.AddContent(MimeType.Text, body);
-            sendGridMessage.AddTo(new EmailAddress(email));
-
-            var response = _client.SendEmailAsync(sendGridMessage);
-
-            return Task.CompletedTask;
+                await _client.SendTransacEmailAsync(sendSmtpEmail);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error on sending mail with Brevo.", ex);
+            }
         }
     }
 }
